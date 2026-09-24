@@ -8,7 +8,7 @@
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green.svg)](LICENSE)
 
-Kumpulan Praktikum 02–08 Computer Vision dengan GUI interaktif, mode batch, dataset siap pakai, dan hasil eksperimen yang dapat disimpan.
+Kumpulan Praktikum 02–08 dan Pertemuan 11 Computer Vision dengan GUI interaktif, mode batch, dataset siap pakai, dan hasil eksperimen yang dapat disimpan.
 
 </div>
 
@@ -19,6 +19,12 @@ Kumpulan Praktikum 02–08 Computer Vision dengan GUI interaktif, mode batch, da
 | Manipulasi warna | Kuantisasi | Filtering dan deteksi tepi |
 |:---:|:---:|:---:|
 | ![Praktikum 03](assets/previews/praktikum_03.png) | ![Praktikum 04](assets/previews/praktikum_04.png) | ![Praktikum 08](assets/previews/praktikum_08.png) |
+
+### Morfologi citra — Pertemuan 11
+
+<div align="center">
+  <img src="assets/previews/praktikum_11.png" alt="Dilasi, erosi, opening, closing, hit-or-miss, dan thinning" width="760">
+</div>
 
 ## Fitur
 
@@ -41,6 +47,7 @@ Kumpulan Praktikum 02–08 Computer Vision dengan GUI interaktif, mode batch, da
 | `praktikum_06.py` | Histogram transformasi, autolevel grayscale dan per kanal BGR |
 | `praktikum_07.py` | Histogram equalization, CDF, autolevel, dan CLAHE |
 | `praktikum_08.py` | Noise, reduksi noise, konvolusi, Prewitt, Sobel, Laplacian, Canny, sharpness, sketsa |
+| `praktikum_11.py` | Dilasi, erosi, opening, closing, gradient, top/black hat, Hit-or-Miss, skeleton dan thinning |
 
 ## Instalasi
 
@@ -81,6 +88,12 @@ Jalankan file praktikum yang ingin dicoba:
 python praktikum_02.py
 ```
 
+Untuk membuka praktikum morfologi:
+
+```bash
+python praktikum_11.py
+```
+
 Di dalam GUI:
 
 1. Pilih gambar dari menu **Dataset** atau tekan **Buka gambar lain**.
@@ -95,6 +108,12 @@ Mode batch cocok untuk terminal, otomasi, atau lingkungan tanpa display:
 
 ```bash
 python praktikum_08.py --batch --input "data/Dog_Image.jpg"
+```
+
+Contoh menjalankan seluruh percobaan morfologi tanpa GUI:
+
+```bash
+python praktikum_11.py --batch --input "data/Block_Image.jpg"
 ```
 
 Argumen `--input` opsional. Bila tidak diberikan, program memilih salah satu dataset bawaan. Hasil disimpan otomatis ke:
@@ -119,6 +138,7 @@ computer-vision-course/
 ├── praktikum_06.py
 ├── praktikum_07.py
 ├── praktikum_08.py
+├── praktikum_11.py
 ├── requirements.txt
 └── LICENSE
 ```
@@ -136,8 +156,10 @@ Anda juga dapat menggunakan gambar sendiri melalui GUI atau argumen `--input`.
 - Median filter biasanya efektif untuk salt-and-pepper noise; Gaussian filter lebih sesuai untuk noise yang menyebar.
 - Sobel memberi bobot lebih besar pada piksel dekat pusat kernel sehingga umumnya lebih stabil terhadap noise dibanding Prewitt.
 - Kuantisasi dengan bit lebih rendah menghasilkan tingkat warna lebih sedikit dan efek posterisasi lebih kuat.
+- Dilasi memperluas foreground, sedangkan erosi menipiskannya sesuai bentuk structuring element.
+- Opening efektif menghilangkan objek kecil; closing mengisi lubang atau celah kecil.
+- Skeleton/thinning mereduksi objek menjadi garis tipis sambil mempertahankan struktur utama dan konektivitasnya.
 
 ## Lisensi
 
 Proyek ini tersedia di bawah [GNU General Public License v3.0](LICENSE).
-

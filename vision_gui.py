@@ -23,11 +23,14 @@ OPERATIONS = {
     7: ["Histogram Equalization", "Autolevel", "CLAHE", "Histogram + CDF"],
     8: ["Gaussian noise", "Salt & pepper noise", "Average blur", "Gaussian blur", "Median filter",
         "Prewitt", "Sobel", "Laplacian", "Canny", "Sharpness", "Sketsa"],
+    11: ["Citra biner", "Dilasi", "Erosi", "Opening", "Closing", "Morphological gradient",
+         "Top hat", "Black hat", "Hit-or-Miss", "Thinning / Skeleton"],
 }
 
 DEFAULTS = {
     2: "Panorama_Image.jpg", 3: "Fruit_Image.png", 4: "Face-Cream_Image.jpg",
     5: "Cat_Image.jpg", 6: "Architecture_Image.jpg", 7: "Face-Black_Image.jpg", 8: "Dog_Image.jpg",
+    11: "Block_Image.jpg",
 }
 
 
@@ -90,6 +93,28 @@ def transform(number: int, operation: str, image: np.ndarray, value: float) -> n
         hn=hist/max(hist.max(),1)*320
         for x,y in enumerate(hn): cv2.line(canvas,(x*2+64,380),(x*2+64,380-int(y)),(225,120,45),1)
         pts=np.array([[x*2+64,380-int(cdf[x]*320)] for x in range(256)],np.int32); cv2.polylines(canvas,[pts],False,(45,80,220),2); return canvas
+    if number == 11:
+        threshold = int(value * 2.55)
+        binary = cv2.threshold(g, threshold, 255, cv2.THRESH_BINARY_INV)[1]
+        size = max(3, (int(value) // 15) * 2 + 3)
+        kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (size, size))
+        if operation == "Citra biner": return binary
+        if operation == "Dilasi": return cv2.dilate(binary, kernel, iterations=1)
+        if operation == "Erosi": return cv2.erode(binary, kernel, iterations=1)
+        if operation == "Opening": return cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
+        if operation == "Closing": return cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+        if operation == "Morphological gradient": return cv2.morphologyEx(binary, cv2.MORPH_GRADIENT, kernel)
+        if operation == "Top hat": return cv2.morphologyEx(binary, cv2.MORPH_TOPHAT, kernel)
+        if operation == "Black hat": return cv2.morphologyEx(binary, cv2.MORPH_BLACKHAT, kernel)
+        if operation == "Hit-or-Miss":
+            small = cv2.threshold(g, threshold, 1, cv2.THRESH_BINARY_INV)[1]
+            hit_kernel = np.array([[-1, 1, -1], [0, 1, 0], [0, 1, 0]], np.int8)
+            return cv2.morphologyEx(small, cv2.MORPH_HITMISS, hit_kernel) * 255
+        skeleton = np.zeros_like(binary); work = binary.copy(); sk = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+        while cv2.countNonZero(work):
+            eroded = cv2.erode(work, sk); opened = cv2.dilate(eroded, sk)
+            skeleton = cv2.bitwise_or(skeleton, cv2.subtract(work, opened)); work = eroded
+        return skeleton
     # Praktikum 08
     rng=np.random.default_rng(42); k=max(3,int(value)//10*2+3)
     if operation == "Gaussian noise": return np.clip(g.astype(float)+rng.normal(0,max(1,value/2),g.shape),0,255).astype(np.uint8)
