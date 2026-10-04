@@ -20,12 +20,6 @@ Kumpulan Praktikum 02–08 dan Pertemuan 11 Computer Vision dengan GUI interakti
 |:---:|:---:|:---:|
 | ![Praktikum 03](assets/previews/praktikum_03.png) | ![Praktikum 04](assets/previews/praktikum_04.png) | ![Praktikum 08](assets/previews/praktikum_08.png) |
 
-### Morfologi citra — Pertemuan 11
-
-<div align="center">
-  <img src="assets/previews/praktikum_11.png" alt="Dilasi, erosi, opening, closing, hit-or-miss, dan thinning" width="760">
-</div>
-
 ## Fitur
 
 - GUI bertema gelap dengan perbandingan citra asli dan hasil secara langsung.
